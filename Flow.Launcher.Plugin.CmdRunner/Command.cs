@@ -11,6 +11,7 @@ public partial class Command
     public string Description { get; set; } = "";
     public string WorkingDirectory { get; set; } = "";
     public string Path { get; set; } = "";
+
     private string arguments;
 
     public string Arguments
@@ -19,16 +20,19 @@ public partial class Command
         set
         {
             arguments = value;
-            ArgumentList = ResolveArguments(arguments);
+            ArgumentNames = ResolveArgumentNames(arguments);
         }
     }
 
-    [JsonIgnore] public List<Argument> ArgumentList { get; private set; }
+    [JsonIgnore] public List<string> ArgumentNames { get; private set; }
 
 
-    private static List<Argument> ResolveArguments(string cmd)
+    [GeneratedRegex("\\${.*?}")]
+    private static partial Regex ArgumentRegex();
+
+    private static List<string> ResolveArgumentNames(string cmd)
     {
-        var list = new List<Argument>();
+        var list = new List<string>();
         if (string.IsNullOrEmpty(cmd))
             return list;
         var mc = ArgumentRegex().Matches(cmd);
@@ -39,30 +43,21 @@ public partial class Command
             var match = mc[i];
             // var mv = match.Value.Trim();
             // var name = mv.Substring(2, mv.Length - 3);
-
             var name = match.Value.Trim();
-
-            list.Add(new Argument
-            {
-                ArgsIndex = i,
-                ArgsName = name,
-            });
+            list.Add(name);
         }
 
         return list;
     }
-
-    [GeneratedRegex("\\${.*?}")]
-    private static partial Regex ArgumentRegex();
 }
 
-public class Argument
-{
-    public int ArgsIndex { get; set; }
-    public string ArgsName { get; set; }
-
-    public override string ToString()
-    {
-        return $"{ArgsIndex}: {ArgsName}";
-    }
-}
+// public class Argument
+// {
+//     public int ArgsIndex { get; set; }
+//     public string ArgsName { get; set; }
+//
+//     public override string ToString()
+//     {
+//         return $"{ArgsIndex}: {ArgsName}";
+//     }
+// }

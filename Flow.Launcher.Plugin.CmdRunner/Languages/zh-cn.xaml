@@ -6,5 +6,8 @@
 
     <system:String x:Key="cmd_runner_plugin_title">Cmd命令运行器</system:String>
     <system:String x:Key="cmd_runner_plugin_description">Cmd命令运行器</system:String>
-    
+    <system:String x:Key="cmd_runner_enter_run_command">回车运行命令: {0}</system:String>
+    <system:String x:Key="cmd_runner_arguments_not_enough">输入参数不足: {0}/{1}. 参数: {2}</system:String>
+    <system:String x:Key="cmd_runner_arguments_too_many">输入参数太多: {0}/{1}</system:String>
+
 </ResourceDictionary>

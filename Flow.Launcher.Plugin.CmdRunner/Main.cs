@@ -1,15 +1,16 @@
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 
 namespace Flow.Launcher.Plugin.CmdRunner
 {
-    public class CmdRunner : IPlugin, IContextMenu
+    public class CmdRunner : IPlugin, IContextMenu, IPluginI18n, IDisposable
     {
         public const string IconPath = "Images\\CmdRunner-Icon.png";
 
         private PluginInitContext _context;
         private Settings _settings;
+        private Query _query;
 
         public void Init(PluginInitContext context)
         {
@@ -19,8 +20,15 @@ namespace Flow.Launcher.Plugin.CmdRunner
 
         public List<Result> Query(Query query)
         {
+            _query = query;
             return _convertToResult(query);
         }
+
+        public void Dispose()
+        {
+            _query = null;
+        }
+
 
         private List<Result> _convertToResult(Query query)
         {
@@ -49,83 +57,73 @@ namespace Flow.Launcher.Plugin.CmdRunner
             }
 
             var inputName = searchTerms[0];
-            var inputParams = new List<string>();
-            for (var i = 1; i < searchTerms.Length; i++)
-                inputParams.Add(searchTerms[i]);
+            var paramCount = termCount - 1;
 
-            _context.API.LogInfo("Input",
-                $"{inputName}. searchTerms.Length = {searchTerms.Length}. size = {inputParams.Count}. PARAM: {string.Join(',', inputParams)}");
-
-            var fullMatchCmdList = new List<Command>();
             var fuzzyMatchCmdList = new List<Command>();
+
+            var result = new List<Result>();
 
             foreach (var command in _settings.Commands)
             {
                 if (command.Name.Equals(inputName))
                 {
-                    fullMatchCmdList.Add(command);
-                    continue;
-                }
+                    if (command.ArgumentNames.Count == paramCount)
+                    {
+                        result.Add(new Result
+                        {
+                            IcoPath = IconPath,
+                            Title = command.Name,
+                            SubTitle = string.Format(_context.API.GetTranslation("cmd_runner_enter_run_command"),
+                                command.Description),
+                            ContextData = command,
+                            Action = _ => _runCmdAction(command, _query)
+                        });
+                    }
+                    else
+                    {
+                        var completeText = $"{query.ActionKeyword} {command.Name} ";
+                        if (paramCount > command.ArgumentNames.Count)
+                        {
+                            result.Add(new Result
+                            {
+                                IcoPath = IconPath,
+                                Title = command.Name,
+                                SubTitle = string.Format(
+                                    _context.API.GetTranslation("cmd_runner_arguments_too_many"),
+                                    $"{paramCount}", $"{command.ArgumentNames.Count}"),
+                                Action = _ => false
+                            });
+                            continue;
+                        }
 
-                if (!inputParams.Any())
+                        result.Add(new Result
+                        {
+                            IcoPath = IconPath,
+                            Title = command.Name,
+                            SubTitle = _getNotEnoughArgumentsMessage(paramCount, command.ArgumentNames.Count,
+                                command.ArgumentNames),
+                            ContextData = command,
+                            AutoCompleteText = completeText,
+                            Action = _ =>
+                            {
+                                _context.API.ChangeQuery(completeText);
+                                return false;
+                            }
+                        });
+                    }
+                }
+                else
                 {
                     var mr = _context.API.FuzzySearch(inputName, command.Name);
                     if (mr.Success)
                     {
+                        // for order , frzzy match should be last
                         fuzzyMatchCmdList.Add(command);
                     }
                 }
             }
 
-            var result = new List<Result>();
-
-            if (fullMatchCmdList.Any())
-            {
-                var tipList = new List<Result>();
-                foreach (var command in fullMatchCmdList)
-                {
-                    if (command.ArgumentList.Count == inputParams.Count)
-                    {
-                        var ew = new ExecuteParamWrapper(command, inputParams);
-                        result.Add(new Result
-                        {
-                            IcoPath = IconPath,
-                            Title = command.Name,
-                            SubTitle = "回车: " + command.Description,
-                            ContextData = ew,
-                            Action = ctx =>
-                            {
-                                _context.API.LogInfo("Select",
-                                    $"ARGS = {command.Arguments} ... {string.Join(',', ew.InputParams)}");
-                                _context.API.LogInfo("Select", $"P1: {string.Join(';', command.ArgumentList)}");
-                                _context.API.LogInfo("Select", $"P2: {string.Join(';', query.SearchTerms)}");
-                                _context.API.LogInfo("Select", $"Search: {string.Join(';', query.RawQuery)}");
-                                // CmdUtil.ExecuteCmd(command, inputParams);
-                                return false;
-                            }
-                        });
-                    }
-                    else
-                    {
-                        tipList.Add(new Result
-                        {
-                            IcoPath = IconPath,
-                            Title = command.Name,
-                            SubTitle = "参数: " + command.Description,
-                            ContextData = command,
-                            AutoCompleteText = $"{query.ActionKeyword} {command.Name} ",
-                            Action = _ =>
-                            {
-                                _context.API.ChangeQuery($"{query.ActionKeyword} {command.Name} ");
-                                return false;
-                            }
-                        });
-                    }
-                }
-
-                result.AddRange(tipList);
-            }
-
+            // add latest
             foreach (var command in fuzzyMatchCmdList)
             {
                 result.Add(new Result
@@ -146,17 +144,49 @@ namespace Flow.Launcher.Plugin.CmdRunner
             return result;
         }
 
+        private bool _runCmdAction(Command command, Query latestQuery)
+        {
+            var searchTerms = latestQuery.SearchTerms;
+            if (searchTerms.Length == 0) return true;
+
+            var paramsList = new List<string>();
+            for (var i = 1; i < searchTerms.Length; i++)
+                paramsList.Add(searchTerms[i]);
+
+            CmdUtil.ExecuteCmd(command, paramsList, _settings.InternalArguments);
+            return true;
+        }
+
+        private string _getNotEnoughArgumentsMessage(int currentCount, int needCount, List<string> argumentNames)
+        {
+            var miss = new List<string>();
+
+            for (var i = currentCount; i < needCount; i++)
+            {
+                miss.Add(argumentNames[i]);
+            }
+
+            return string.Format(
+                _context.API.GetTranslation("cmd_runner_arguments_not_enough"),
+                $"{currentCount}", $"{needCount}",
+                string.Join(",", miss));
+        }
+
         public List<Result> LoadContextMenus(Result selectedResult)
         {
-            var ew = selectedResult.ContextData as ExecuteParamWrapper;
             return new List<Result>()
             {
-                new Result()
-                {
-                    Title = ew.Command.Name,
-                    SubTitle = string.Join(',', ew.InputParams),
-                }
             };
+        }
+
+        public string GetTranslatedPluginTitle()
+        {
+            return _context.API.GetTranslation("cmd_runner_plugin_title");
+        }
+
+        public string GetTranslatedPluginDescription()
+        {
+            return _context.API.GetTranslation("cmd_runner_plugin_description");
         }
     }
 }

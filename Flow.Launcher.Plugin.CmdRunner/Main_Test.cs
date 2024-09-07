@@ -39,11 +39,11 @@ public class Main_Test
             // update
             // command.Cmd = "format ${codec}";
             Console.WriteLine(
-                $"Cmd: {command.Name} - {command.Description} - cmd: {command.Arguments} - {command.ArgumentList.Count}");
-            var arguments = command.ArgumentList;
+                $"Cmd: {command.Name} - {command.Description} - cmd: {command.Arguments} - {command.ArgumentNames.Count}");
+            var arguments = command.ArgumentNames;
             foreach (var argument in arguments)
             {
-                Console.WriteLine($"  --> arg: {argument.ArgsIndex} - {argument.ArgsName}");
+                // Console.WriteLine($"  --> arg: {argument.ArgsIndex} - {argument.ArgsName}");
             }
         }
     }
