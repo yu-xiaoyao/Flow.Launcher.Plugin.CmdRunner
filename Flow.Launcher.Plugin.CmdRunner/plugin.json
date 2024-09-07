@@ -1,0 +1,12 @@
+{
+  "ID": "DC9CB20556C14431AB3CBF7F1B7CAE2A",
+  "ActionKeyword": "cr",
+  "Name": "CmdRunner",
+  "Description": "Run and Manage custom command plugin",
+  "Author": "yu-xiaoyao",
+  "Version": "1.0.0",
+  "Language": "csharp",
+  "Website": "https://github.com/yu-xiaoyao/Flow.Launcher.Plugin.CmdRunner",
+  "IcoPath": "Images\\CmdRunner-Icon.png",
+  "ExecuteFileName": "Flow.Launcher.Plugin.CmdRunner.dll"
+}

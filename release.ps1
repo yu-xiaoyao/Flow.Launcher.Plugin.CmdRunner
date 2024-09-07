@@ -1,0 +1,2 @@
+dotnet publish Flow.Launcher.Plugin.CmdRunner -c Release -r win-x64 --no-self-contained
+Compress-Archive -LiteralPath Flow.Launcher.Plugin.CmdRunner/bin/Release/win-x64/publish -DestinationPath Flow.Launcher.Plugin.CmdRunner/bin/CmdRunner.zip -Force
