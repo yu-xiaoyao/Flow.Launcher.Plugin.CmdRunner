@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:Flow.Launcher.Plugin.CmdRunner"
         mc:Ignorable="d"
-        Title="CmdRunnerWindows" Width="720" Height="480">
+        Title="CmdRunnerWindows" Width="720" Height="600">
     <StackPanel>
 
         <DockPanel Margin="10" DockPanel.Dock="Top">
@@ -37,7 +37,9 @@
 
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <TextBlock TextAlignment="Center" Width="170">工作目录(WorkingDirectory):</TextBlock>
+                        <!--
                         <Button Margin="20 0 20 0" Width="300" Click="Btn_Select_Working_Dir">选择工作目录(Select Working Directory)</Button>
+                        -->
                     </StackPanel>
 
                     <TextBox Name="TbWorkingDirectory" Width="680" Margin="5"></TextBox>
