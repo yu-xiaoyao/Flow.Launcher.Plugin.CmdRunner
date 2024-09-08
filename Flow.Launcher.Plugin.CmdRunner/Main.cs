@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Controls;
 
 namespace Flow.Launcher.Plugin.CmdRunner
 {
-    public class CmdRunner : IPlugin, IContextMenu, IPluginI18n, IDisposable
+    public class CmdRunner : IPlugin, IContextMenu, IPluginI18n, ISettingProvider, IDisposable
     {
         public const string IconPath = "Images\\CmdRunner-Icon.png";
 
@@ -179,6 +180,7 @@ namespace Flow.Launcher.Plugin.CmdRunner
             };
         }
 
+
         public string GetTranslatedPluginTitle()
         {
             return _context.API.GetTranslation("cmd_runner_plugin_title");
@@ -187,6 +189,11 @@ namespace Flow.Launcher.Plugin.CmdRunner
         public string GetTranslatedPluginDescription()
         {
             return _context.API.GetTranslation("cmd_runner_plugin_description");
+        }
+
+        public Control CreateSettingPanel()
+        {
+            return new SettingsControlPanel(_context, _settings);
         }
     }
 }

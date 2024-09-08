@@ -1,0 +1,72 @@
+﻿<Window x:Class="Flow.Launcher.Plugin.CmdRunner.CmdRunnerWindows"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Flow.Launcher.Plugin.CmdRunner"
+        mc:Ignorable="d"
+        Title="CmdRunnerWindows" Width="720" Height="480">
+    <StackPanel>
+
+        <DockPanel Margin="10" DockPanel.Dock="Top">
+            <StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock VerticalAlignment="Center" TextAlignment="Center" Width="140" Foreground="Red">* 名称(Name):</TextBlock>
+                    <TextBox Name="TbName" Width="520"></TextBox>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock VerticalAlignment="Center" TextAlignment="Center" Width="140">描述(Description):</TextBlock>
+                    <TextBox Name="TbDescription" Width="520"></TextBox>
+                </StackPanel>
+
+
+                <StackPanel Orientation="Vertical" Background="Cornsilk" Margin="0 10 0 10">
+
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock TextAlignment="Center" Width="170" Foreground="Red">* 路径(Path):</TextBlock>
+                        <Button Margin="20 0 20 0" Width="300" Click="Btn_Select_Path">选择可执行文件(Select the executable file)</Button>
+                    </StackPanel>
+
+                    <TextBox Name="TbPath" Width="680" Margin="5"></TextBox>
+                </StackPanel>
+
+
+                <StackPanel Orientation="Vertical" Background="Azure" Margin="0 10 0 10">
+
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock TextAlignment="Center" Width="170">工作目录(WorkingDirectory):</TextBlock>
+                        <Button Margin="20 0 20 0" Width="300" Click="Btn_Select_Working_Dir">选择工作目录(Select Working Directory)</Button>
+                    </StackPanel>
+
+                    <TextBox Name="TbWorkingDirectory" Width="680" Margin="5"></TextBox>
+                </StackPanel>
+
+
+                <StackPanel Orientation="Vertical" Background="Cornsilk" Margin="0 10 0 10">
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock TextAlignment="Center" Width="160">参数(Arguments):</TextBlock>
+                        <Button Margin="20 0 20 0" Width="200" Click="Btn_View_Inner_Arguments">查看内置变量</Button>
+                    </StackPanel>
+                    <TextBox Name="TbArguments" MaxWidth="680" Width="680" Height="80" TextWrapping="Wrap" Margin="5">
+                    </TextBox>
+                </StackPanel>
+
+
+            </StackPanel>
+        </DockPanel>
+
+        <StackPanel Margin="10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="30">
+                <Button Width="300" Margin="0 0 5 0" Click="Btn_Save">取消(Cancel)</Button>
+                <Button Width="300" Margin="5 0 0 0" Click="Btn_Cancel">保存(Save)</Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                <TextBlock Name="TbTip" Foreground="Red" TextWrapping="WrapWithOverflow" Width="680"></TextBlock>
+            </StackPanel>
+        </StackPanel>
+
+    </StackPanel>
+</Window>
