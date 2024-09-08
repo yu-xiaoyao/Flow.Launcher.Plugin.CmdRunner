@@ -20,7 +20,7 @@ public partial class Command
         set
         {
             arguments = value;
-            ArgumentNames = ResolveArgumentNames(arguments);
+            ArgumentNames = _resolveArgumentNames(arguments);
         }
     }
 
@@ -30,7 +30,12 @@ public partial class Command
     [GeneratedRegex("\\${.*?}")]
     private static partial Regex ArgumentRegex();
 
-    private static List<string> ResolveArgumentNames(string cmd)
+    public void ResolveArgumentNames()
+    {
+        ArgumentNames = _resolveArgumentNames(arguments);
+    }
+
+    private static List<string> _resolveArgumentNames(string cmd)
     {
         var list = new List<string>();
         if (string.IsNullOrEmpty(cmd))
@@ -50,14 +55,3 @@ public partial class Command
         return list;
     }
 }
-
-// public class Argument
-// {
-//     public int ArgsIndex { get; set; }
-//     public string ArgsName { get; set; }
-//
-//     public override string ToString()
-//     {
-//         return $"{ArgsIndex}: {ArgsName}";
-//     }
-// }

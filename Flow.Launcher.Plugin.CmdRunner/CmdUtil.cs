@@ -40,9 +40,12 @@ public class CmdUtil
             arguments = arguments.Replace(paramItem, paramValue);
         }
 
-        foreach (var kv in internalArguments)
+        if (internalArguments != null)
         {
-            arguments = arguments.Replace(kv.Key, kv.Value);
+            foreach (var kv in internalArguments)
+            {
+                arguments = arguments.Replace(kv.Key, kv.Value);
+            }
         }
 
         return arguments;

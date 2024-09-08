@@ -5,7 +5,7 @@ using System.Windows.Controls;
 
 namespace Flow.Launcher.Plugin.CmdRunner
 {
-    public class CmdRunner : IPlugin, IContextMenu, IPluginI18n, ISettingProvider, IDisposable
+    public class CmdRunner : IPlugin, IContextMenu, IPluginI18n, ISettingProvider
     {
         public const string IconPath = "Images\\CmdRunner-Icon.png";
 
@@ -23,11 +23,6 @@ namespace Flow.Launcher.Plugin.CmdRunner
         {
             _query = query;
             return _convertToResult(query);
-        }
-
-        public void Dispose()
-        {
-            _query = null;
         }
 
 

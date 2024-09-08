@@ -31,7 +31,11 @@ public partial class SettingsControlPanel : UserControl
 
     private void Btn_Add_Cmd(object sender, RoutedEventArgs e)
     {
-        var totpAdd = new CmdRunnerWindows(addCmd => { _settings.Commands.Add(addCmd); })
+        var totpAdd = new CmdRunnerWindows(addCmd =>
+        {
+            addCmd.ResolveArgumentNames();
+            _settings.Commands.Add(addCmd);
+        })
         {
             Title = "添加命令(Add Cmd)",
             Topmost = true,
@@ -56,10 +60,10 @@ public partial class SettingsControlPanel : UserControl
 
         var totpAdd = new CmdRunnerWindows((newCmd, oldIndex) =>
             {
-                if (oldIndex != -1)
-                {
-                    _settings.Commands[oldIndex] = newCmd;
-                }
+                if (oldIndex == -1) return;
+                
+                newCmd.ResolveArgumentNames();
+                _settings.Commands[oldIndex] = newCmd;
             },
             command, index)
         {
