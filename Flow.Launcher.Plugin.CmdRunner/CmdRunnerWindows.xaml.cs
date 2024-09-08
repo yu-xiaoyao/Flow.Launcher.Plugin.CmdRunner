@@ -7,7 +7,7 @@ namespace Flow.Launcher.Plugin.CmdRunner;
 
 public delegate void OnCmdAdd(Command command);
 
-public delegate void OnCmdUpdate(Command command, Command oldCommand, int oldIndex);
+public delegate void OnCmdUpdate(Command command, int oldIndex);
 
 public partial class CmdRunnerWindows : Window
 {
@@ -23,23 +23,54 @@ public partial class CmdRunnerWindows : Window
     }
 
     private OnCmdUpdate _onCmdUpdate;
-    protected int updateIndex = -1;
-    private Command _udpateCommand;
+    private int updateIndex = -1;
 
     public CmdRunnerWindows(OnCmdUpdate onCmdUpdate, Command command, int index)
     {
         _isUpdate = true;
         _onCmdUpdate = onCmdUpdate;
-        _udpateCommand = command;
         updateIndex = index;
         InitializeComponent();
+        _renderInit(command);
+    }
+
+    private void _renderInit(Command command)
+    {
+        TbName.Text = command.Name;
+        TbDescription.Text = command.Description;
+        TbPath.Text = command.Path;
+        TbWorkingDirectory.Text = command.WorkingDirectory;
+        TbArguments.Text = command.Arguments;
     }
 
     private void Btn_Save(object sender, RoutedEventArgs e)
     {
-        var command = new Command();
+        TbTip.Text = "";
+
+        var name = TbName.Text.Trim();
+        if (string.IsNullOrEmpty(name))
+        {
+            TbTip.Text = "名称不能为空（Name cannot be empty）";
+            return;
+        }
+
+        var path = TbPath.Text.Trim();
+        if (string.IsNullOrEmpty(path))
+        {
+            TbTip.Text = "路径不能为空（Path cannot be empty）";
+            return;
+        }
+
+        var command = new Command()
+        {
+            Name = name,
+            Description = TbDescription.Text.Trim(),
+            Path = path,
+            WorkingDirectory = TbWorkingDirectory.Text.Trim(),
+            Arguments = TbArguments.Text.Trim(),
+        };
         if (_isUpdate)
-            _onCmdUpdate?.Invoke(command, _udpateCommand, updateIndex);
+            _onCmdUpdate?.Invoke(command, updateIndex);
         else
             _onCmdAdd?.Invoke(command);
         Close();
@@ -52,7 +83,7 @@ public partial class CmdRunnerWindows : Window
 
     private void Btn_View_Inner_Arguments(object sender, RoutedEventArgs e)
     {
-        throw new System.NotImplementedException();
+        //TODO 
     }
 
     private void Btn_Select_Working_Dir(object sender, RoutedEventArgs e)

@@ -8,8 +8,32 @@
              d:DesignHeight="300" d:DesignWidth="780">
     <StackPanel Orientation="Vertical">
 
-        <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Left">
+        <StackPanel Orientation="Horizontal" Margin="5" Height="40" HorizontalAlignment="Left">
             <Button Margin="4" Click="Btn_Add_Cmd">添加命令(Add Cmd)</Button>
+            <Button Margin="4" Click="Save_Settings">保存设置(Save Settings)</Button>
+        </StackPanel>
+
+
+        <StackPanel Margin="10 0 10 10" Height="220">
+            <Grid Height="220">
+                <DataGrid x:Name="CmdDataGrid" Height="220"
+                          AutoGenerateColumns="False"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
+                          Background="DarkGray"
+                          MouseDoubleClick="CmdDataGrid_OnMouseDoubleClick"
+                          CanUserAddRows="False">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Width="2*" Binding="{Binding Name}" />
+                        <DataGridTextColumn Header="Description" Width="2*" Binding="{Binding Description}" />
+                        <DataGridTextColumn Header="Path" Width="4*" Binding="{Binding Path}" />
+                        <DataGridTextColumn Header="Arguments" Width="4*" Binding="{Binding Arguments}" />
+                        <DataGridTextColumn Header="WorkingDirectory" Width="2*" Binding="{Binding WorkingDirectory}" />
+                    </DataGrid.Columns>
+
+                </DataGrid>
+            </Grid>
         </StackPanel>
 
     </StackPanel>
