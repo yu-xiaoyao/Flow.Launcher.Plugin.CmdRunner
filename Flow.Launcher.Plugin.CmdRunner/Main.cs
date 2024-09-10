@@ -170,8 +170,30 @@ namespace Flow.Launcher.Plugin.CmdRunner
 
         public List<Result> LoadContextMenus(Result selectedResult)
         {
-            return new List<Result>()
+            var command = selectedResult.ContextData as Command;
+            // CmdUtil.FillArguments()
+            return new List<Result>
             {
+                new()
+                {
+                    Title = _context.API.GetTranslation("cmd_runner_copy_run_cmd"),
+                    IcoPath = IconPath,
+                    Action = _ =>
+                    {
+                        _context.API.CopyToClipboard(selectedResult.Title);
+                        return true;
+                    }
+                },
+                new()
+                {
+                    Title = _context.API.GetTranslation("cmd_runner_copy_cmd_info"),
+                    IcoPath = IconPath,
+                    Action = _ =>
+                    {
+                        _context.API.CopyToClipboard(selectedResult.Title);
+                        return true;
+                    }
+                }
             };
         }
 

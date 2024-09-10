@@ -9,5 +9,7 @@
     <system:String x:Key="cmd_runner_enter_run_command">回车运行命令: {0}</system:String>
     <system:String x:Key="cmd_runner_arguments_not_enough">输入参数不足: {0}/{1}. 参数: {2}</system:String>
     <system:String x:Key="cmd_runner_arguments_too_many">输入参数太多: {0}/{1}</system:String>
+    <system:String x:Key="cmd_runner_copy_run_cmd">复制运行命令</system:String>
+    <system:String x:Key="cmd_runner_copy_cmd_info">复制命令详情</system:String>
 
 </ResourceDictionary>

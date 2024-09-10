@@ -9,5 +9,7 @@
     <system:String x:Key="cmd_runner_enter_run_command">Enter run command: {0}</system:String>
     <system:String x:Key="cmd_runner_arguments_not_enough">arguments not enough: {0}/{1}. Arguments: {2}</system:String>
     <system:String x:Key="cmd_runner_arguments_too_many">Too many input arguments: {0}/{1}</system:String>
+    <system:String x:Key="cmd_runner_copy_run_cmd">Copy Run Command</system:String>
+    <system:String x:Key="cmd_runner_copy_cmd_info">Copy Command Detail</system:String>
 
 </ResourceDictionary>

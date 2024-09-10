@@ -30,6 +30,11 @@ public class CmdUtil
         process.Close();
     }
 
+    public static string BuildCommand(Command command, Dictionary<string, string> internalArguments = null)
+    {
+        return FillArguments(command.Arguments, command.ArgumentNames, null, internalArguments);
+    }
+
     public static string FillArguments(string arguments, List<string> argumentNames, List<string> paramList,
         Dictionary<string, string> internalArguments)
     {
